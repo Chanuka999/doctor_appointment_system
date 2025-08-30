@@ -5,29 +5,32 @@ import axios from "axios";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handdleSubmit = (e) => {
+  const handdleSubmit = async (e) => {
     e.preventDefault();
-
-    axios
-      .post("http://localhost:3000/login", { email, password })
-      .then((result) => {
-        console.log(result);
-        if (result.data.success) {
-          navigate("/home");
-        } else {
-          alert(result.data.message);
-        }
-      })
-      .catch((err) => {
-        if (err.response && err.response.data && err.response.data.message) {
-          alert(err.response.data.message);
-        } else {
-          alert("Login failed. Please try again.");
-        }
-        console.log(err);
+    try {
+      const response = await axios.post("http://localhost:3000/login", {
+        email,
+        password,
       });
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      setError("");
+      if (user.role === "patient") {
+        navigate("/patient-dashboard");
+      } else if (user.role === "doctor") {
+        navigate("/doctor-dashboard");
+      } else if (user.role === "admin") {
+        navigate("/admin-dashboard");
+      }
+    } catch (error) {
+      setError(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
+    }
   };
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
@@ -39,7 +42,9 @@ const Login = () => {
           <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
             Login
           </h2>
-
+          {error && (
+            <div className="text-red-500 text-sm mb-2 text-center">{error}</div>
+          )}
           <div className="flex flex-col space-y-1">
             <label
               htmlFor="email"
@@ -57,7 +62,6 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-
           <div className="flex flex-col space-y-1">
             <label
               htmlFor="password"
@@ -75,20 +79,21 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
           <div>
             <button
-              type="text"
+              type="submit"
               className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150"
             >
               Login
             </button>
           </div>
         </form>
-        <p>Do not have an Account</p>
+        <p className="mt-4 text-center text-gray-700">
+          Do not have an Account?
+        </p>
         <Link
           to="/register"
-          className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none"
+          className="block w-full text-center bg-gray-200 rounded-md py-2 mt-2 text-blue-700 hover:bg-gray-300 transition duration-150"
         >
           Register
         </Link>
