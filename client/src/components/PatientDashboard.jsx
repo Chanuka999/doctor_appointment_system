@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import Activity from "./Activity";
 
 ChartJS.register(
   CategoryScale,
@@ -90,14 +91,14 @@ const PatientDashboard = () => {
   };
 
   const navItems = [
-    { name: "Activity", icon: "📊" },
-    { name: "General", icon: "🏥", active: true },
-    { name: "Fitness", icon: "🏋️" },
-    { name: "Measurements", icon: "📏" },
-    { name: "Health History", icon: "📋" },
-    { name: "Resources", icon: "📚" },
-    { name: "Help", icon: "❓" },
-    { name: "Change Patient", icon: "🔄" },
+    { name: "Activity", icon: "📊", path: "/acivity" },
+    { name: "General", icon: "🏥", active: true, path: "/general" },
+    { name: "Fitness", icon: "🏋️", path: "/fitness" },
+    { name: "Measurements", icon: "📏", path: "/measurements" },
+    { name: "Health History", icon: "📋", path: "/health-history" },
+    { name: "Resources", icon: "📚", path: "/resources" },
+    { name: "Help", icon: "❓", path: "/help" },
+    { name: "Change Patient", icon: "🔄", path: "/change-patient" },
   ];
 
   const medications = [
