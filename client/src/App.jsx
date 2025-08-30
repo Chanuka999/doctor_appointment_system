@@ -8,6 +8,7 @@ import PatientDashboard from "./components/PatientDashboard";
 import DoctorDashboard from "./components/DoctorDashboard";
 import AdminDashboard from "./components/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Activity from "./components/Activity";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/acivity" element={<Activity />} />
       </Routes>
     </BrowserRouter>
   );
